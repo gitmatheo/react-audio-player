@@ -6,7 +6,7 @@ export function SongListItem({
   isCurrent,
   onSelect,
   isPaused,
-  onPlayBtn,
+  onPlayPause,
   currentTime,
 }) {
   function handleClick() {
@@ -28,7 +28,7 @@ export function SongListItem({
       {isCurrent && (
         <div className="col">
           <span>{currentTime}</span>
-          <button className="play-btn" onClick={onPlayBtn}>
+          <button className="play-btn" onClick={onPlayPause}>
             {isPaused ? <PlayArrow /> : <Pause />}
           </button>
         </div>

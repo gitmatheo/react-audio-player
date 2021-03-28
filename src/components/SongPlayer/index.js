@@ -17,9 +17,9 @@ export function SongPlayer({
   isLooping,
   onLoop,
   onMute,
-  onPreviousSong,
-  onNextSong,
-  onPlayBtn,
+  onSkipToPreviousSong,
+  onSkipToNextSong,
+  onPlayPause,
   onChange,
   percentage,
   currentTime,
@@ -67,13 +67,13 @@ export function SongPlayer({
             <button className="mute" onClick={onMute}>
               {isMuted ? <VolumeOff /> : <VolumeUp />}
             </button>
-            <button className="prev" onClick={onPreviousSong}>
+            <button className="prev" onClick={onSkipToPreviousSong}>
               <SkipPrevious />
             </button>
-            <button className="play" onClick={onPlayBtn}>
+            <button className="play" onClick={onPlayPause}>
               {isPaused ? <PlayArrow /> : <Pause />}
             </button>
-            <button className="next" onClick={onNextSong}>
+            <button className="next" onClick={onSkipToNextSong}>
               <SkipNext />
             </button>
 

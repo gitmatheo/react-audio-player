@@ -23,13 +23,19 @@ export function useAudioPlayer(audioRef) {
   const previousSong = songs[currentSongIndex - 1];
   const nextSong = songs[currentSongIndex + 1];
 
-  function handleSelectSong(selectedSong) {
-    const audioIndex = songs.findIndex(
-      (song) => song.audioUrl === selectedSong.audioUrl
-    );
-    if (audioIndex >= 0) {
-      setCurrentSongIndex(audioIndex);
-    }
+  function handlePlayPause() {
+    setPause((prevIsPaused) => !prevIsPaused);
+    isPaused ? audioRef.current.play() : audioRef.current.pause();
+  }
+
+  function handleMute() {
+    setMute(!audioRef.current.muted);
+    audioRef.current.muted = !isMuted;
+  }
+
+  function handleLoop() {
+    setLoop(!audioRef.current.loop);
+    audioRef.current.loop = !isLooping;
   }
 
   function handleSkipToPreviousSong() {
@@ -48,6 +54,21 @@ export function useAudioPlayer(audioRef) {
     setStateOfAudioRef();
   }
 
+  function handleSelectSong(selectedSong) {
+    const audioIndex = songs.findIndex(
+      (song) => song.audioUrl === selectedSong.audioUrl
+    );
+    if (audioIndex >= 0) {
+      setCurrentSongIndex(audioIndex);
+    }
+  }
+
+  const handleChange = (e) => {
+    const audio = audioRef.current;
+    audio.currentTime = (audio.duration / 100) * e.target.value;
+    setPercentage(e.target.value);
+  };
+
   function setStateOfAudioRef() {
     setTimeout(() => {
       if (!isPaused) audioRef.current.play();
@@ -55,27 +76,6 @@ export function useAudioPlayer(audioRef) {
       if (isLooping) audioRef.current.loop = true;
     });
   }
-
-  function handleMute() {
-    setMute(!audioRef.current.muted);
-    audioRef.current.muted = !isMuted;
-  }
-
-  function handleLoop() {
-    setLoop(!audioRef.current.loop);
-    audioRef.current.loop = !isLooping;
-  }
-
-  function handlePlay() {
-    setPause((prevIsPaused) => !prevIsPaused);
-    isPaused ? audioRef.current.play() : audioRef.current.pause();
-  }
-
-  const onChange = (e) => {
-    const audio = audioRef.current;
-    audio.currentTime = (audio.duration / 100) * e.target.value;
-    setPercentage(e.target.value);
-  };
 
   const getCurrentDuration = (e) => {
     const percent = (
@@ -115,26 +115,26 @@ export function useAudioPlayer(audioRef) {
 
     songPlayerConfig: {
       song: currentSong,
-      previousSong,
-      nextSong,
-      isPaused,
       isMuted,
+      previousSong,
+      isPaused,
+      nextSong,
       isLooping,
-      onLoop: handleLoop,
+      onPlayPause: handlePlayPause,
       onMute: handleMute,
-      onPreviousSong: handleSkipToPreviousSong,
-      onNextSong: handleSkipToNextSong,
-      onPlayBtn: handlePlay,
-      onChange: onChange,
+      onLoop: handleLoop,
+      onSkipToPreviousSong: handleSkipToPreviousSong,
+      onSkipToNextSong: handleSkipToNextSong,
+      onChange: handleChange,
       currentTime: correctTime(currentTime),
       duration: correctTime(duration),
       percentage,
     },
 
     songListItemConfig: {
-      onSelect: handleSelectSong,
-      onPlayBtn: handlePlay,
       isPaused,
+      onPlayPause: handlePlayPause,
+      onSelect: handleSelectSong,
       currentTime: correctTime(currentTime),
     },
   };
