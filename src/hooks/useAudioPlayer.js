@@ -37,12 +37,7 @@ export function useAudioPlayer(audioRef) {
       previousIndex > 0 ? previousIndex - 1 : songs.length - 1
     );
 
-    if (!isPaused) play(audioRef);
-    if (isMuted) {
-      setTimeout(() => {
-        audioRef.current.muted = true;
-      });
-    }
+    setStateOfAudioRef();
   }
 
   function handleSkipToNextSong() {
@@ -50,20 +45,14 @@ export function useAudioPlayer(audioRef) {
       songs.length > previousIndex + 1 ? previousIndex + 1 : 0
     );
 
-    if (!isPaused) {
-      play(audioRef);
-    }
-
-    if (isMuted) {
-      setTimeout(() => {
-        audioRef.current.muted = true;
-      });
-    }
+    setStateOfAudioRef();
   }
 
-  function play(audioRef) {
+  function setStateOfAudioRef() {
     setTimeout(() => {
-      audioRef.current.play();
+      if (!isPaused) audioRef.current.play();
+      if (isMuted) audioRef.current.muted = true;
+      if (isLooping) audioRef.current.loop = true;
     });
   }
 
