@@ -23,7 +23,8 @@ export function useAudioPlayer(audioRef) {
   const previousSong = songs[currentSongIndex - 1];
   const nextSong = songs[currentSongIndex + 1];
 
-  function handlePlayPause() {
+  function handlePlayPause(e) {
+    e.stopPropagation();
     setPause((prevIsPaused) => !prevIsPaused);
     isPaused ? audioRef.current.play() : audioRef.current.pause();
   }
@@ -61,6 +62,8 @@ export function useAudioPlayer(audioRef) {
     if (audioIndex >= 0) {
       setCurrentSongIndex(audioIndex);
     }
+
+    setStateOfAudioRef();
   }
 
   const handleChange = (e) => {

@@ -4,15 +4,14 @@ import { StyledSongListItem } from './StyledSongListItem';
 export function SongListItem({
   song,
   isCurrent,
-  onSelect,
   isPaused,
-  onPlayPause,
   currentTime,
+  onSelect,
+  onPlayPause,
 }) {
   function handleClick() {
     onSelect(song);
   }
-
   return (
     <StyledSongListItem
       className={`${isCurrent ? 'selected' : null}`}
