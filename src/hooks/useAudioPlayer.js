@@ -6,6 +6,8 @@ export function useAudioPlayer(audioRef) {
   const [songs, setSongs] = useState([]);
   const [currentSongIndex, setCurrentSongIndex] = useState(0);
   const [isPaused, setPause] = useState(true);
+  const [isMuted, setMute] = useState(false);
+  const [isLooping, setLoop] = useState(false);
 
   const [percentage, setPercentage] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -36,6 +38,11 @@ export function useAudioPlayer(audioRef) {
     );
 
     if (!isPaused) play(audioRef);
+    if (isMuted) {
+      setTimeout(() => {
+        audioRef.current.muted = true;
+      });
+    }
   }
 
   function handleSkipToNextSong() {
@@ -43,7 +50,15 @@ export function useAudioPlayer(audioRef) {
       songs.length > previousIndex + 1 ? previousIndex + 1 : 0
     );
 
-    if (!isPaused) play(audioRef);
+    if (!isPaused) {
+      play(audioRef);
+    }
+
+    if (isMuted) {
+      setTimeout(() => {
+        audioRef.current.muted = true;
+      });
+    }
   }
 
   function play(audioRef) {
@@ -52,9 +67,18 @@ export function useAudioPlayer(audioRef) {
     });
   }
 
-  function handlePlayBtn() {
-    setPause((prevIsPaused) => !prevIsPaused);
+  function handleMute() {
+    setMute(!audioRef.current.muted);
+    audioRef.current.muted = !isMuted;
+  }
 
+  function handleLoop() {
+    setLoop(!audioRef.current.loop);
+    audioRef.current.loop = !isLooping;
+  }
+
+  function handlePlay() {
+    setPause((prevIsPaused) => !prevIsPaused);
     isPaused ? audioRef.current.play() : audioRef.current.pause();
   }
 
@@ -105,9 +129,13 @@ export function useAudioPlayer(audioRef) {
       previousSong,
       nextSong,
       isPaused,
+      isMuted,
+      isLooping,
+      onLoop: handleLoop,
+      onMute: handleMute,
       onPreviousSong: handleSkipToPreviousSong,
       onNextSong: handleSkipToNextSong,
-      onPlayBtn: handlePlayBtn,
+      onPlayBtn: handlePlay,
       onChange: onChange,
       currentTime: correctTime(currentTime),
       duration: correctTime(duration),
@@ -116,7 +144,7 @@ export function useAudioPlayer(audioRef) {
 
     songListItemConfig: {
       onSelect: handleSelectSong,
-      onPlayBtn: handlePlayBtn,
+      onPlayBtn: handlePlay,
       isPaused,
       currentTime: correctTime(currentTime),
     },

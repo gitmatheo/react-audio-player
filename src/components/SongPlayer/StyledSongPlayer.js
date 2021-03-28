@@ -79,6 +79,7 @@ export const StyledSongPlayer = styled.section`
     background: linear-gradient(to bottom, white -100%, #323b44 78%);
     color: white;
     box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.4);
+    margin: 0 7px;
 
     &:active {
       box-shadow: 0px 6px 16px rgba(0, 0, 0, 0.4);
@@ -88,13 +89,23 @@ export const StyledSongPlayer = styled.section`
   .play {
     width: 70px;
     height: 70px;
-    margin: 0 10px;
   }
 
   .prev,
   .next {
     width: 50px;
     height: 50px;
+  }
+
+  .mute,
+  .loop {
+    font-size: 12px;
+    width: 35px;
+    height: 35px;
+  }
+
+  .active {
+    color: rgb(218, 55, 145);
   }
 
   .prev-next {

@@ -1,10 +1,22 @@
-import { Pause, PlayArrow, SkipNext, SkipPrevious } from '@material-ui/icons';
+import {
+  Loop,
+  Pause,
+  PlayArrow,
+  SkipNext,
+  SkipPrevious,
+  VolumeUp,
+  VolumeOff,
+} from '@material-ui/icons';
 import { ProgressBar } from '../ProgressBar';
 import { StyledSongPlayer } from './StyledSongPlayer';
 
 export function SongPlayer({
   song,
   isPaused,
+  isMuted,
+  isLooping,
+  onLoop,
+  onMute,
   onPreviousSong,
   onNextSong,
   onPlayBtn,
@@ -20,6 +32,8 @@ export function SongPlayer({
   const previousSongText =
     previousSong && previousSong.title && `Previous: ${previousSong.title}`;
   const nextSongText = nextSong && nextSong.title && `Next: ${nextSong.title}`;
+
+  const active = `${isLooping && 'active'}`;
 
   return (
     <>
@@ -50,6 +64,9 @@ export function SongPlayer({
           <ProgressBar percentage={percentage} onChange={onChange} />
 
           <div className="player-box">
+            <button className="mute" onClick={onMute}>
+              {isMuted ? <VolumeOff /> : <VolumeUp />}
+            </button>
             <button className="prev" onClick={onPreviousSong}>
               <SkipPrevious />
             </button>
@@ -58,6 +75,13 @@ export function SongPlayer({
             </button>
             <button className="next" onClick={onNextSong}>
               <SkipNext />
+            </button>
+
+            <button
+              className={`loop ${isLooping && 'active'}`}
+              onClick={onLoop}
+            >
+              {isLooping ? <Loop /> : <Loop />}
             </button>
           </div>
 
