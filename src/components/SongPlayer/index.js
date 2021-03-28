@@ -30,17 +30,15 @@ export function SongPlayer({
   const { coverUrl, title, artist } = song;
 
   const previousSongText =
-    previousSong && previousSong.title && `Previous: ${previousSong.title}`;
-  const nextSongText = nextSong && nextSong.title && `Next: ${nextSong.title}`;
-
-  const active = `${isLooping && 'active'}`;
+    previousSong?.title && `Previous: ${previousSong.title}`;
+  const nextSongText = nextSong?.title && `Next: ${nextSong.title}`;
 
   return (
     <>
       <StyledSongPlayer>
         <div className="cover-box">
           <div className="cover-box-text">
-            <img width="250" height="250" src={coverUrl} alt="Song cover" />
+            <img src={coverUrl} alt="Song cover" />
 
             <div className="titles">
               <h2>{title}</h2>
