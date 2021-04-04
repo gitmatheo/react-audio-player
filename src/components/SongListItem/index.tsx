@@ -1,5 +1,16 @@
 import { Pause, PlayArrow } from '@material-ui/icons';
+import { ReactElement } from 'react';
+import { Song } from '../../interfaces/Song';
 import { StyledSongListItem } from './StyledSongListItem';
+
+export interface SongListItemProps {
+  song: Song;
+  isCurrent: boolean;
+  isPaused: boolean;
+  currentTime: string;
+  onSelect: (song: Song) => void;
+  onPlayPause: (e: any) => void;
+}
 
 export function SongListItem({
   song,
@@ -8,7 +19,7 @@ export function SongListItem({
   currentTime,
   onSelect,
   onPlayPause,
-}) {
+}: SongListItemProps): ReactElement {
   function handleClick() {
     onSelect(song);
   }
@@ -18,7 +29,7 @@ export function SongListItem({
       onClick={handleClick}
     >
       <div className="col">
-        <img src={song.coverUrl}></img>
+        <img src={song.coverUrl} alt={song.title}></img>
         <p>
           {song.title} by {song.artist}
         </p>

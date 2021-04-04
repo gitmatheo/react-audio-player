@@ -1,17 +1,25 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, ReactElement, LegacyRef } from 'react';
 import { StyledProgressBar } from './StyledProgressBar';
 
-export function ProgressBar({ percentage = 0, onChange }) {
+export interface ProgressBarProps {
+  percentage: number;
+  onChange: (e: React.ChangeEvent<HTMLButtonElement>) => void;
+}
+
+export function ProgressBar({
+  percentage = 0,
+  onChange,
+}: ProgressBarProps): ReactElement {
   const [position, setPosition] = useState(0);
   const [marginLeft, setMarginLeft] = useState(0);
   const [progressBarWidth, setProgressBarWidth] = useState(0);
 
-  const rangeRef = useRef();
-  const thumbRef = useRef();
+  const rangeRef = useRef<HTMLDivElement>();
+  const thumbRef = useRef<HTMLInputElement>();
 
   useEffect(() => {
-    const rangeWidth = rangeRef.current.getBoundingClientRect().width;
-    const thumbWidth = thumbRef.current.getBoundingClientRect().width;
+    const rangeWidth = rangeRef.current!.getBoundingClientRect().width;
+    const thumbWidth = thumbRef.current!.getBoundingClientRect().width;
     const centerThumb = (thumbWidth / 100) * percentage * -1;
     const centerProgressBar =
       thumbWidth +
@@ -32,7 +40,7 @@ export function ProgressBar({ percentage = 0, onChange }) {
       ></div>
       <div
         className="thumb"
-        ref={thumbRef}
+        ref={thumbRef as LegacyRef<HTMLDivElement>}
         style={{
           left: `${position}%`,
           marginLeft: `${marginLeft}px`,
@@ -41,10 +49,10 @@ export function ProgressBar({ percentage = 0, onChange }) {
       <input
         type="range"
         value={position}
-        ref={rangeRef}
+        ref={rangeRef as LegacyRef<HTMLInputElement>}
         step="0.01"
         className="range"
-        onChange={onChange}
+        onChange={onChange as any}
       />
     </StyledProgressBar>
   );

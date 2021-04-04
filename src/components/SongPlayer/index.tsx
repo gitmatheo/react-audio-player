@@ -7,8 +7,28 @@ import {
   VolumeUp,
   VolumeOff,
 } from '@material-ui/icons';
+import { ReactElement } from 'react';
+import { Song } from '../../interfaces/Song';
 import { ProgressBar } from '../ProgressBar';
 import { StyledSongPlayer } from './StyledSongPlayer';
+
+export interface SongPlayerProps {
+  song: Song;
+  isPaused: boolean;
+  isMuted: boolean;
+  isLooping: boolean;
+  onLoop: () => void;
+  onMute: () => void;
+  onSkipToPreviousSong: () => void;
+  onSkipToNextSong: () => void;
+  onPlayPause: (e: React.ChangeEvent<HTMLButtonElement>) => void;
+  onChange: (e: React.ChangeEvent<HTMLButtonElement>) => void;
+  percentage: number;
+  currentTime: string;
+  duration: string;
+  previousSong: Song;
+  nextSong: Song;
+}
 
 export function SongPlayer({
   song,
@@ -26,19 +46,19 @@ export function SongPlayer({
   duration,
   previousSong,
   nextSong,
-}) {
+}: SongPlayerProps): ReactElement {
   const { coverUrl, title, artist } = song;
 
   const previousSongText =
-    previousSong?.title && `Previous: ${previousSong.title}`;
-  const nextSongText = nextSong?.title && `Next: ${nextSong.title}`;
+    previousSong && previousSong.title && `Previous: ${previousSong.title}`;
+  const nextSongText = nextSong && nextSong.title && `Next: ${nextSong.title}`;
 
   return (
     <>
       <StyledSongPlayer>
         <div className="cover-box">
           <div className="cover-box-text">
-            <img src={coverUrl} alt="Song cover" />
+            <img width="250" height="250" src={coverUrl} alt="Song cover" />
 
             <div className="titles">
               <h2>{title}</h2>
@@ -68,7 +88,7 @@ export function SongPlayer({
             <button className="prev" onClick={onSkipToPreviousSong}>
               <SkipPrevious />
             </button>
-            <button className="play" onClick={onPlayPause}>
+            <button className="play" onClick={onPlayPause as any}>
               {isPaused ? <PlayArrow /> : <Pause />}
             </button>
             <button className="next" onClick={onSkipToNextSong}>

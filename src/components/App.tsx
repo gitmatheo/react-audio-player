@@ -1,8 +1,8 @@
-import { useRef } from 'react';
+import { MutableRefObject, ReactElement, useRef } from 'react';
 import { SongListItem } from './SongListItem';
 import { SongPlayer } from './SongPlayer';
 import styled from 'styled-components';
-import { useAudioPlayer } from '../hooks/useAudioPlayer';
+import { AudioPlayer, useAudioPlayer } from '../hooks/useAudioPlayer';
 
 const StyledApp = styled.div`
   display: flex;
@@ -37,10 +37,11 @@ const StyledApp = styled.div`
   }
 `;
 
-export function App() {
-  const audioRef = useRef();
+export function App(): ReactElement {
+  const audioRef = useRef<HTMLAudioElement>(null);
 
-  const player = useAudioPlayer(audioRef);
+  const player = useAudioPlayer(audioRef as MutableRefObject<HTMLAudioElement>);
+
   const {
     mainConfig: audioPlayer,
     songPlayerConfig,
@@ -61,9 +62,9 @@ export function App() {
               {audioPlayer.songs.map((song) => (
                 <SongListItem
                   key={song.audioUrl}
+                  {...songListItemConfig}
                   song={song}
                   isCurrent={audioPlayer.currentSong.audioUrl === song.audioUrl}
-                  {...songListItemConfig}
                 />
               ))}
             </ul>
